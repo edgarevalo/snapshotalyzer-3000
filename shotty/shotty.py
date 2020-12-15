@@ -14,13 +14,14 @@ def list_instances(project):
 	"List EC2 instances"
 	instances = []
 	
-
+	project = input("Cual es el nombre del proyecto? ")
 	if project:
 		filters = [{'Name':'tag:Project', 'Values':[project]}]
 		instances = ec2.instances.filter(Filters=filters)
 	else:
-		instances = ec2.instances.all()  
-	with open('instances.csv', 'w') as csvfile: #esta parte la agregué para que escriba el output en un CSV
+		instances = ec2.instances.all() 
+	nombreArchivo=project 
+	with open(nombreArchivo+'.csv', 'w') as csvfile: #esta parte la agregué para que escriba el output en un CSV
 		writer = csv.writer(csvfile)
 		writer.writerow(['ID', 'Zona', 'Stado', 'DNS', 'Projecto'])		
 		for i in instances:
