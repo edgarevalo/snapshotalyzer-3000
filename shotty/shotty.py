@@ -10,11 +10,64 @@ ec2 = session.resource('ec2')
 
 #########################################################################
 
-@cli.group()
+@click.group() #Main group called CLI
+
+def cli():
+	#Shotty manages snapshots
+	return
+
+@cli.group('volumes') #Branch group attached to CLI
+
+def volumes():
+	"""Commands for volumes"""
+	return
+
+@volumes.command('list')
+
+@click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
+
+def list_volumes(project):
+	instances = []
+	
+	project = input("Cual es el nombre del proyecto? ")
+	if project:
+		filters = [{'Name':'tag:Project', 'Values':[project]}]
+		instances = ec2.instances.filter(Filters=filters)
+	else:
+		instances = ec2.instances.all() 
+	
+	if project == "": 
+		nombreArchivo = "lista-instancias"
+	else: nombreArchivo=project 
+	
+	guardarEnArchivo = input("Desea guardar el resultado en un CSV? (si/no): ")
+	if guardarEnArchivo == "si":
+		with open(nombreArchivo+'.csv', 'w') as csvfile: #esta parte la agregué para que escriba el output en un CSV
+			writer = csv.writer(csvfile)
+			writer.writerow(['ID', 'Zona', 'Stado', 'DNS', 'Projecto'])		
+			for i in instances:
+				tags = { t['Key']: t['Value'] for t in i.tags  or []}
+				writer.writerow([i.id, i.placement, i.state, i.public_dns_name, tags.get('Project', '<no project>')]) #aqui escribe linea a linea en el archivo
+				for v in i.volumes.all():
+					print(", ".join((v.id, i.id, v.state, str(v.size) + "GB", v.encrypted and "Encrypted" or "Not Encrypted" )))
+			print("\n")		
+	else:
+		for i in instances:
+			tags = { t['Key']: t['Value'] for t in i.tags  or []}
+			for v in i.volumes.all():
+					print(", ".join((v.id, i.id, v.state, str(v.size) + "GB", v.encrypted and "Encrypted" or "Not Encrypted" )))
+			print("\n ")		
+	return
+
+
+@cli.group('instances') #Branch group attached to CLI
 
 def instances():
-	#Commands for instances
+	"""Commands for instances"""
 	return
+
+###############################################################################################################
+
 @instances.command('list')
 
 @click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
@@ -69,6 +122,53 @@ def list_instances(project):
 @click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
 
 def stop_instances(project): #esta parte se encarga de apagar las instancias
+	"Stop instance by ID"
+
+
+	ID=input("Cual es el id de la instancia?: ").split()
+	#print(ID)
+	#instances = ec2.instances.filter(InstanceIds=ids)
+	instances = ec2.instances.filter()
+	str1 =  ""
+	nombreDeInstancia= str1.join(ID) 
+	#print(nombreDeInstancia)
+	time.sleep(0.5)
+	instances.stop(InstanceIds=ID)
+	print("Instance "+ nombreDeInstancia + " stopped")
+	"""for i in instances:
+		print("Stopping {0}...".format(i.id))
+		time.sleep(0.5)
+		i.stop(InstanceIds=ID)
+		print("Instance"+ str(i.id)+ "stopped")	
+	"""
+################################################################################
+@instances.command('start')
+
+@click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
+
+
+def start_instances(project): #esta parte se encarga de apagar las instancias
+	"Start instance by ID"
+
+
+	ID=input("Cual es el id de la instancia?: ").split()
+	#print(ID)
+	#instances = ec2.instances.filter(InstanceIds=ids)
+	instances = ec2.instances.filter()
+	str1 =  ""
+	nombreDeInstancia= str1.join(ID) 
+	#print(nombreDeInstancia)
+	time.sleep(0.5)
+	instances.start(InstanceIds=ID)
+	print("Instance "+ nombreDeInstancia + " started")
+
+################################################################################
+
+@instances.command('stop_project')
+
+@click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
+
+def stop_instances(project): #esta parte se encarga de apagar las instancias
 	"Stop instances"
 	instances = []
 	
@@ -82,10 +182,11 @@ def stop_instances(project): #esta parte se encarga de apagar las instancias
 		print("Stopping {0}...".format(i.id))
 		time.sleep(0.5)
 		i.stop()
-	print("All Instances stopped")	
-################################################################################
+	print("All Instances stopped")
 
-@instances.command('start')
+#################################################################################
+
+@instances.command('start_project')
 @click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
 
 def start_instances(project): #esta parte se encarga de encender las instancias
@@ -104,18 +205,6 @@ def start_instances(project): #esta parte se encarga de encender las instancias
 		i.start()
 	print("All Instances started")	
 
-#################################################################################
-
-
-@click.group()
-
-def cli():
-
-#################################################################################
-@cli.group('volumes')
-
-def volumes():
-	#Commands for volumes
 
 
 #################  MAIN ###################
@@ -127,4 +216,5 @@ if __name__ == '__main__':
 	if seleccion == "stop": 
 		stop_instances()
 	else: start_instances()"""
-	instances()
+	#instances()
+	cli()
