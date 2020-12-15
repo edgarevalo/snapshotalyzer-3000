@@ -8,7 +8,15 @@ session = boto3.Session(profile_name='edgar')
 
 ec2 = session.resource('ec2')
 
-@click.command()
+#########################################################################
+
+@cli.group()
+
+def instances():
+	#Commands for instances
+	return
+@instances.command('list')
+
 @click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
 
 def list_instances(project):
@@ -53,7 +61,14 @@ def list_instances(project):
 			tags.get('Project', '<no project>')
 			)))
 	return
-def stop_instances(): #esta parte se encarga de apagar las instancias
+###############################################################################
+
+
+@instances.command('stop')
+
+@click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
+
+def stop_instances(project): #esta parte se encarga de apagar las instancias
 	"Stop instances"
 	instances = []
 	
@@ -68,8 +83,12 @@ def stop_instances(): #esta parte se encarga de apagar las instancias
 		time.sleep(0.5)
 		i.stop()
 	print("All Instances stopped")	
+################################################################################
 
-def start_instances(): #esta parte se encarga de encender las instancias
+@instances.command('start')
+@click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
+
+def start_instances(project): #esta parte se encarga de encender las instancias
 	"Start instances"
 	instances = []
 	
@@ -85,10 +104,27 @@ def start_instances(): #esta parte se encarga de encender las instancias
 		i.start()
 	print("All Instances started")	
 
+#################################################################################
+
+
+@click.group()
+
+def cli():
+
+#################################################################################
+@cli.group('volumes')
+
+def volumes():
+	#Commands for volumes
+
+
+#################  MAIN ###################
+
 if __name__ == '__main__':
-	seleccion = input("escriba el comando: ")
+	"""seleccion = input("escriba el comando: ")
 	if seleccion == "list":
 		list_instances()
 	if seleccion == "stop": 
 		stop_instances()
-	else: start_instances()
+	else: start_instances()"""
+	instances()
