@@ -21,22 +21,37 @@ def list_instances(project):
 		instances = ec2.instances.filter(Filters=filters)
 	else:
 		instances = ec2.instances.all() 
-	nombreArchivo=project 
-	with open(nombreArchivo+'.csv', 'w') as csvfile: #esta parte la agregué para que escriba el output en un CSV
-		writer = csv.writer(csvfile)
-		writer.writerow(['ID', 'Zona', 'Stado', 'DNS', 'Projecto'])		
+	
+	if project == "": 
+		nombreArchivo = "lista-instancias"
+	else: nombreArchivo=project 
+	
+	guardarEnArchivo = input("Desea guardar el resultado en un CSV? (si/no): ")
+	if guardarEnArchivo == "si":
+		with open(nombreArchivo+'.csv', 'w') as csvfile: #esta parte la agregué para que escriba el output en un CSV
+			writer = csv.writer(csvfile)
+			writer.writerow(['ID', 'Zona', 'Stado', 'DNS', 'Projecto'])		
+			for i in instances:
+				tags = { t['Key']: t['Value'] for t in i.tags  or []}
+				writer.writerow([i.id, i.placement, i.state, i.public_dns_name, tags.get('Project', '<no project>')]) #aqui escribe linea a linea en el archivo
+				print(','.join((
+					i.id,
+					i.instance_type,
+					i.placement['AvailabilityZone'],
+					i.state['Name'],
+					i.public_dns_name,
+					tags.get('Project', '<no project>')
+					)))
+	else:
 		for i in instances:
-			tags = { t['Key']: t['Value'] for t in i.tags  or []}	
-			writer.writerow([i.id, i.placement, i.state, i.public_dns_name, tags.get('Project', '<no project>')]) #aqui escribe linea a linea en el archivo
-			print(','.join((
-				i.id,
-				i.instance_type,
-				i.placement['AvailabilityZone'],
-				i.state['Name'],
-				i.public_dns_name,
-				tags.get('Project', '<no project>')
-				)))
-
+			tags = { t['Key']: t['Value'] for t in i.tags  or []}
+			print(','.join((i.id,
+			i.instance_type,
+			i.placement['AvailabilityZone'],
+			i.state['Name'],
+			i.public_dns_name,
+			tags.get('Project', '<no project>')
+			)))
 	return
 def stop_instances(): #esta parte se encarga de apagar las instancias
 	"Stop instances"
@@ -72,8 +87,8 @@ def start_instances(): #esta parte se encarga de encender las instancias
 
 if __name__ == '__main__':
 	seleccion = input("escriba el comando: ")
-	if seleccion == "list_instances":
+	if seleccion == "list":
 		list_instances()
-	if seleccion == "stop_intances": 
+	if seleccion == "stop": 
 		stop_instances()
 	else: start_instances()
