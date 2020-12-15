@@ -10,7 +10,7 @@ ec2 = session.resource('ec2')
 
 #########################################################################
 
-@cli.group()
+@click.group()
 
 def instances():
 	#Commands for instances
@@ -105,20 +105,6 @@ def start_instances(project): #esta parte se encarga de encender las instancias
 	print("All Instances started")	
 
 #################################################################################
-
-
-@click.group()
-
-def cli():
-
-#################################################################################
-@cli.group('volumes')
-
-def volumes():
-	#Commands for volumes
-
-
-#################  MAIN ###################
 
 if __name__ == '__main__':
 	"""seleccion = input("escriba el comando: ")
