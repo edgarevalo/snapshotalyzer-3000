@@ -1,6 +1,7 @@
 import boto3
 import click
 import csv
+import time
 
 
 session = boto3.Session(profile_name='edgar')
@@ -37,6 +38,21 @@ def list_instances(project):
 				)))
 
 	return
-
+def stop_instances():
+	"Stop instances"
+	instances = []
+	
+	project = input("Cual es el nombre del proyecto? ")
+	if project:
+		filters = [{'Name':'tag:Project', 'Values':[project]}]
+		instances = ec2.instances.filter(Filters=filters)
+	else:
+		instances = ec2.instances.all() 
+	for i in instances:
+		print("Stopping {0}...".format(i.id))
+		time.sleep(0.5)
+		i.stop()
+	print("All Instances stopped")	
 if __name__ == '__main__':
-	list_instances()
+	#list_instances()
+	stop_instances()
