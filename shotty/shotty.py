@@ -38,7 +38,7 @@ def list_instances(project):
 				)))
 
 	return
-def stop_instances():
+def stop_instances(): #esta parte se encarga de apagar las instancias
 	"Stop instances"
 	instances = []
 	
@@ -53,6 +53,27 @@ def stop_instances():
 		time.sleep(0.5)
 		i.stop()
 	print("All Instances stopped")	
+
+def start_instances(): #esta parte se encarga de encender las instancias
+	"Start instances"
+	instances = []
+	
+	project = input("Cual es el nombre del proyecto? ")
+	if project:
+		filters = [{'Name':'tag:Project', 'Values':[project]}]
+		instances = ec2.instances.filter(Filters=filters)
+	else:
+		instances = ec2.instances.all() 
+	for i in instances:
+		print("Starting {0}...".format(i.id))
+		time.sleep(0.5)
+		i.start()
+	print("All Instances started")	
+
 if __name__ == '__main__':
-	#list_instances()
-	stop_instances()
+	seleccion = input("escriba el comando: ")
+	if seleccion == "list_instances":
+		list_instances()
+	if seleccion == "stop_intances": 
+		stop_instances()
+	else: start_instances()
