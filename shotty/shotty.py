@@ -25,7 +25,7 @@ def list_instances(project):
 		writer.writerow(['ID', 'Zona', 'Stado', 'DNS', 'Projecto'])		
 		for i in instances:
 			tags = { t['Key']: t['Value'] for t in i.tags  or []}	
-			writer.writerow([i.id, i.placement, i.state, i.public_dns_name, tags.get('Project', '<no project>')])
+			writer.writerow([i.id, i.placement, i.state, i.public_dns_name, tags.get('Project', '<no project>')]) #aqui escribe linea a linea en el archivo
 			print(','.join((
 				i.id,
 				i.instance_type,
@@ -34,7 +34,6 @@ def list_instances(project):
 				i.public_dns_name,
 				tags.get('Project', '<no project>')
 				)))
-			#writer.writerow([i.id, i.placement, i.state, i.public_dns_name, tags.get('Project', '<no project>')])
 
 	return
 
