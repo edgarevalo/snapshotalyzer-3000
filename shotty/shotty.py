@@ -58,7 +58,73 @@ def list_volumes(project):
 					print(", ".join((v.id, i.id, v.state, str(v.size) + "GB", v.encrypted and "Encrypted" or "Not Encrypted" )))
 			print("\n ")		
 	return
+###############################################################################
+@cli.group('snapshots')
 
+def snapshots():
+	"""Commands for snapshots"""
+	return
+
+@snapshots.command('list')
+
+@click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
+
+def list_snapshots(project):
+
+	instances = []
+
+	instances = ec2.instances.all() 
+
+	snappy = None
+
+	for i in instances:
+		for v in i.volumes.all():
+			for s in v.snapshots.all():
+				snappy = s
+				print(", ".join((
+					s.id,
+					v.id,
+					i.id,
+					s.state,
+					s.progress,
+					s.start_time.strftime("%c")
+					)))
+	return
+
+##############################################################################
+
+@snapshots.command('create')
+
+@click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
+
+def create_snapshot(project):
+   #"Create snapshots for EC2 instances"
+
+	instances = []
+
+	snappy = None
+
+	ID=input("Cual es el id de la instancia?: ").split()
+	instances = ec2.instances.filter(InstanceIds=ID)
+	str1 =  ""
+	nombreDeInstancia= str1.join(ID) 
+
+	for i in instances:
+		for v in i.volumes.all():
+		
+			print(" ")
+			print("Creating snapshot for "+ nombreDeInstancia)
+			time.sleep(0.5)
+			v.create_snapshot()
+			time.sleep(0.5)
+			print("Snapshot for "+ nombreDeInstancia + " requested")
+	print(" ")
+	print("Snapshots requested")		
+
+	return
+
+
+###############################################################################
 
 @cli.group('instances') #Branch group attached to CLI
 
@@ -124,23 +190,14 @@ def list_instances(project):
 def stop_instances(project): #esta parte se encarga de apagar las instancias
 	"Stop instance by ID"
 
-
 	ID=input("Cual es el id de la instancia?: ").split()
-	#print(ID)
-	#instances = ec2.instances.filter(InstanceIds=ids)
 	instances = ec2.instances.filter()
 	str1 =  ""
 	nombreDeInstancia= str1.join(ID) 
-	#print(nombreDeInstancia)
 	time.sleep(0.5)
 	instances.stop(InstanceIds=ID)
 	print("Instance "+ nombreDeInstancia + " stopped")
-	"""for i in instances:
-		print("Stopping {0}...".format(i.id))
-		time.sleep(0.5)
-		i.stop(InstanceIds=ID)
-		print("Instance"+ str(i.id)+ "stopped")	
-	"""
+	
 ################################################################################
 @instances.command('start')
 
@@ -152,12 +209,9 @@ def start_instances(project): #esta parte se encarga de apagar las instancias
 
 
 	ID=input("Cual es el id de la instancia?: ").split()
-	#print(ID)
-	#instances = ec2.instances.filter(InstanceIds=ids)
 	instances = ec2.instances.filter()
 	str1 =  ""
 	nombreDeInstancia= str1.join(ID) 
-	#print(nombreDeInstancia)
 	time.sleep(0.5)
 	instances.start(InstanceIds=ID)
 	print("Instance "+ nombreDeInstancia + " started")
