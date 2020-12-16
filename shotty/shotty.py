@@ -16,9 +16,8 @@ except:
 
 #########################################################################
 
-<<<<<<< HEAD
-@click.group()
-=======
+
+
 @click.group() #Main group called CLI
 
 def cli():
@@ -171,7 +170,7 @@ def create_snapshot(project):
 ###############################################################################
 
 @cli.group('instances') #Branch group attached to CLI
->>>>>>> volumes
+#>>>>>>> volumes
 
 def instances():
 	"""Commands for instances"""
@@ -304,13 +303,13 @@ def start_instances(project): #esta parte se encarga de encender las instancias
 		i.start()
 	print("All Instances started")	
 
-<<<<<<< HEAD
+#<<<<<<< HEAD
 #################################################################################
-=======
+#=======
 
 
 #################  MAIN ###################
->>>>>>> volumes
+#>>>>>>> volumes
 
 if __name__ == '__main__':
 	"""seleccion = input("escriba el comando: ")
