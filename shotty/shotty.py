@@ -4,9 +4,15 @@ import csv
 import time
 
 
-session = boto3.Session(profile_name='edgar')
+try:
+	session = boto3.Session(profile_name=input("Que sesion de AWS desea usar?: "))
+	ec2 = session.resource('ec2')
 
-ec2 = session.resource('ec2')
+except:
+	print("Sesion no existente, cree un perfil con AWS Config --profile")
+	time.sleep(5)
+	exit()
+
 
 #########################################################################
 
