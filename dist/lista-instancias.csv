@@ -1,0 +1,6 @@
+ID,Zona,Stado,DNS,Projecto
+i-03becfd1730be3b3f,"{'AvailabilityZone': 'sa-east-1c', 'GroupName': '', 'Tenancy': 'default'}","{'Code': 80, 'Name': 'stopped'}",,Valkyrie
+i-05439249cded5ee00,"{'AvailabilityZone': 'sa-east-1c', 'GroupName': '', 'Tenancy': 'default'}","{'Code': 80, 'Name': 'stopped'}",,Valkyrie
+i-0e8cebf1ef3de7dfd,"{'AvailabilityZone': 'sa-east-1c', 'GroupName': '', 'Tenancy': 'default'}","{'Code': 80, 'Name': 'stopped'}",,Valkyrie
+i-0f89013525afae8b2,"{'AvailabilityZone': 'sa-east-1c', 'GroupName': '', 'Tenancy': 'default'}","{'Code': 80, 'Name': 'stopped'}",,Valkyrie
+i-054359678845b3cb8,"{'AvailabilityZone': 'sa-east-1c', 'GroupName': '', 'Tenancy': 'default'}","{'Code': 80, 'Name': 'stopped'}",,Test

@@ -1,6 +1,0 @@
-ID,Zona,Stado,DNS,Projecto
-i-03becfd1730be3b3f,"{'AvailabilityZone': 'sa-east-1c', 'GroupName': '', 'Tenancy': 'default'}","{'Code': 16, 'Name': 'running'}",ec2-54-233-126-209.sa-east-1.compute.amazonaws.com,Valkyrie
-i-05439249cded5ee00,"{'AvailabilityZone': 'sa-east-1c', 'GroupName': '', 'Tenancy': 'default'}","{'Code': 16, 'Name': 'running'}",ec2-18-231-150-221.sa-east-1.compute.amazonaws.com,Valkyrie
-i-0e8cebf1ef3de7dfd,"{'AvailabilityZone': 'sa-east-1c', 'GroupName': '', 'Tenancy': 'default'}","{'Code': 16, 'Name': 'running'}",ec2-18-231-186-82.sa-east-1.compute.amazonaws.com,Valkyrie
-i-0f89013525afae8b2,"{'AvailabilityZone': 'sa-east-1c', 'GroupName': '', 'Tenancy': 'default'}","{'Code': 16, 'Name': 'running'}",ec2-18-228-173-123.sa-east-1.compute.amazonaws.com,Valkyrie
-i-054359678845b3cb8,"{'AvailabilityZone': 'sa-east-1c', 'GroupName': '', 'Tenancy': 'default'}","{'Code': 16, 'Name': 'running'}",ec2-18-231-186-38.sa-east-1.compute.amazonaws.com,Valkyrie
