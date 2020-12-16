@@ -93,6 +93,40 @@ def list_snapshots(project):
 
 ##############################################################################
 
+@snapshots.command('create_project')
+
+@click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
+
+def create_snapshot_project(project):
+   #"Create snapshots for EC2 instances in a specific project"
+
+	instances = []
+
+	snappy = None
+	
+	
+	project=input("Cual es el nombre del projecto?: ")
+	filters = [{'Name':'tag:Project', 'Values':[project]}]
+	instances = ec2.instances.filter(Filters=filters)
+
+	for i in instances:
+		for v in i.volumes.all():
+		
+			print(" ")
+			print("Creating snapshot for {0}.".format(i.id))
+			time.sleep(0.5)
+			v.create_snapshot()
+			time.sleep(0.5)
+			print("Snapshot for {0}.".format(i.id) + "requested")
+			print(" ")
+	print("Snapshots requested")		
+
+	return
+
+
+
+##############################################################################
+
 @snapshots.command('create')
 
 @click.option('--project', default=None, help="Only instances for project(tag Project=:<name>)")
@@ -103,8 +137,9 @@ def create_snapshot(project):
 	instances = []
 
 	snappy = None
-
 	ID=input("Cual es el id de la instancia?: ").split()
+	
+
 	instances = ec2.instances.filter(InstanceIds=ID)
 	str1 =  ""
 	nombreDeInstancia= str1.join(ID) 
@@ -113,12 +148,12 @@ def create_snapshot(project):
 		for v in i.volumes.all():
 		
 			print(" ")
-			print("Creating snapshot for "+ nombreDeInstancia)
+			print("Creating snapshot for {0}.".format(i.id))
 			time.sleep(0.5)
 			v.create_snapshot()
 			time.sleep(0.5)
-			print("Snapshot for "+ nombreDeInstancia + " requested")
-	print(" ")
+			print("Snapshot for {0}.".format(i.id) + "requested")
+			print(" ")
 	print("Snapshots requested")		
 
 	return
